@@ -17,41 +17,71 @@ public class MyFrame extends JFrame{
     Random xlos = new Random();
     Random ylos = new Random();
     int x = xlos.nextInt(1152);
-    int y= ylos.nextInt(592);
-    float pkt = 1;
-    float klik = 1;
+    int y= ylos.nextInt(492)+100;
+    float pkt = 0;
+    float klik = 0;
     float skutecznosc;
-
+    boolean started = false;
+    int trudnosc =5;
 
         MyFrame(){
 
             this.setSize(szerokosc,wysokosc);
             this.setLayout(null);
-
-            this.setResizable(false);
-
+            this.setResizable(true);
             this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            this.setTitle("Celuj!");
+
+            JPanel menu = new JPanel();
+            menu.setBounds(0,0,1280,100);
+            menu.setBackground(Color.YELLOW);
+            menu.setOpaque(true);
+            this.add(menu);
+
+            JButton start = new JButton();
+            start.setText("START");
+            start.setBounds(0,0,64,32);
+            menu.add(start);
+
+            JButton stop = new JButton();
+            stop.setText("PRZERWIJ");
+            stop.setBounds(0,33,64,32);
+            menu.add(stop);
+
+
+
 
             JLabel punkty = new JLabel();
             punkty.setBounds(0,0,128,128);
             punkty.setBackground(Color.white);
             punkty.setOpaque(true);
-            skutecznosc = (100*pkt)/klik;
-            punkty.setText(skutecznosc +" %");
+            if(klik == 0){
+
+                punkty.setText("Skutecznosc: %");
+            }
+            else {
+                skutecznosc = (100 * pkt) / klik;
+
+                punkty.setText("Skutecznosc: "+skutecznosc + " %");
+            }
 
 
             JLabel label = new JLabel();
-            label.setBounds(x,y,128,128);
-            label.setBackground(Color.blue);
-            label.setOpaque(true);
 
-            this.add(punkty);
+
+            menu.add(punkty);
             punkty.setVisible(true);
             this.add(label);
-            label.setVisible(true);
+
+            label.setBackground(Color.black);
+            label.setOpaque(true);
+
+
 
             this.setLocationRelativeTo(null);
             this.setVisible(true);
+
+
             this.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -60,9 +90,19 @@ public class MyFrame extends JFrame{
 
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    klik++;
-                    skutecznosc = (100*pkt)/klik;
-                    punkty.setText(skutecznosc +" %");
+                   if(started == true) {
+                       klik++;
+                       if (klik == 0) {
+
+                           punkty.setText("Skutecznosc: %");
+                       } else {
+                           skutecznosc = (100 * pkt) / klik;
+
+                           punkty.setText("Skutecznosc: " + skutecznosc + " %");
+                       }
+
+
+                   }
 
                 }
 
@@ -90,15 +130,89 @@ public class MyFrame extends JFrame{
                 @Override
                 public void mousePressed(MouseEvent e) {
 
-                    x = xlos.nextInt(1152);
-                    y = ylos.nextInt(592);
-                    label.setLocation(x,y);
+                    if (pkt < trudnosc-1){
+                        x = xlos.nextInt(1152);
+                        y = ylos.nextInt(492) + 100;
+                        label.setLocation(x, y);
 
-                    pkt++;
-                    klik++;
-                    skutecznosc = (100*pkt)/klik;
-                    punkty.setText(skutecznosc +" %");
+                        pkt++;
+                        klik++;
+                        if (klik == 0) {
 
+                            punkty.setText("Skutecznosc: %");
+                        } else {
+                            skutecznosc = (100 * pkt) / klik;
+
+                            punkty.setText("Skutecznosc: " + skutecznosc + " %");
+                        }
+                    }
+                    else {
+                        System.out.println("winek");
+                        started=false;
+                        label.setVisible(false);
+                    }
+
+
+
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
+                }
+            });
+            start.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    label.setVisible(true);
+                    label.setBounds(x,y,64,64);
+                    started=true;
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
+                }
+            });
+            stop.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    pkt =0;
+                    klik=0;
+                    label.setVisible(false);
+                    started = false;
+                    punkty.setText("Skutecznosc: %");
+
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
 
                 }
 
