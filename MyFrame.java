@@ -11,33 +11,45 @@ import javax.swing.*;
 public class MyFrame extends JFrame{
 
 
-
+    //rozmiar okna
     final int szerokosc = 1280;
     final int wysokosc = 720;
+    //-----------------------
+    //generowanie wsp pojawienia sie celu
     Random xlos = new Random();
     Random ylos = new Random();
     int x = xlos.nextInt(1152);
     int y= ylos.nextInt(492)+100;
-    float pkt = 0;
-    float klik = 0;
+    //---------------------------------
+    float pkt = 0; //ilosc trafien uzyskanych
+    float klik = 0; //ilosc prob trafienia
     float skutecznosc;
-    boolean started = false;
-    int trudnosc =5;
+    boolean started = false; //czy gra trwa
+    int lcelow =5; //ile celow pojawi sie podczas rozgrywki (zalezy od trudnosci)
+    //rozmiar celu (zalezy od poziomu trudnosci domyslnie normalny)
+    int celszer=64;
+    int celwys=64;
+    //-------------------------------------------
 
         MyFrame(){
-
+            //ustawienie okna gry
             this.setSize(szerokosc,wysokosc);
             this.setLayout(null);
             this.setResizable(true);
+            this.setBackground(Color.white);
             this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.setTitle("Celuj!");
+            //----------------------------
 
+            //menu
             JPanel menu = new JPanel();
             menu.setBounds(0,0,1280,100);
-            menu.setBackground(Color.YELLOW);
+            menu.setBackground(Color.GRAY);
             menu.setOpaque(true);
             this.add(menu);
+            //------------------------------------
 
+            //części menu
             JButton start = new JButton();
             start.setText("START");
             start.setBounds(0,0,64,32);
@@ -48,13 +60,13 @@ public class MyFrame extends JFrame{
             stop.setBounds(0,33,64,32);
             menu.add(stop);
 
-
-
-
             JLabel punkty = new JLabel();
             punkty.setBounds(0,0,128,128);
             punkty.setBackground(Color.white);
             punkty.setOpaque(true);
+            //--------------------------------------
+
+            //wyswietlanie skutecznosci po wlaczeniu gry
             if(klik == 0){
 
                 punkty.setText("Skutecznosc: %");
@@ -65,17 +77,17 @@ public class MyFrame extends JFrame{
                 punkty.setText("Skutecznosc: "+skutecznosc + " %");
             }
 
-
-            JLabel label = new JLabel();
-
-
             menu.add(punkty);
             punkty.setVisible(true);
-            this.add(label);
+            //-------------------------------------------
 
+            //cel
+            JLabel label = new JLabel();
+            this.add(label);
             label.setBackground(Color.black);
             label.setOpaque(true);
-
+            label.setSize(celszer,celwys);
+            //----------------------------------------
 
 
             this.setLocationRelativeTo(null);
@@ -130,7 +142,7 @@ public class MyFrame extends JFrame{
                 @Override
                 public void mousePressed(MouseEvent e) {
 
-                    if (pkt < trudnosc-1){
+                    if (pkt < lcelow-1){
                         x = xlos.nextInt(1152);
                         y = ylos.nextInt(492) + 100;
                         label.setLocation(x, y);
@@ -176,7 +188,18 @@ public class MyFrame extends JFrame{
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     label.setVisible(true);
-                    label.setBounds(x,y,64,64);
+                    label.setLocation(x,y);
+                    pkt=0;
+                    klik=0;
+                    if(klik == 0){
+
+                        punkty.setText("Skutecznosc: %");
+                    }
+                    else {
+                        skutecznosc = (100 * pkt) / klik;
+
+                        punkty.setText("Skutecznosc: "+skutecznosc + " %");
+                    }
                     started=true;
                 }
 
@@ -207,7 +230,15 @@ public class MyFrame extends JFrame{
                     klik=0;
                     label.setVisible(false);
                     started = false;
-                    punkty.setText("Skutecznosc: %");
+                    if(klik == 0){
+
+                        punkty.setText("Skutecznosc: %");
+                    }
+                    else {
+                        skutecznosc = (100 * pkt) / klik;
+
+                        punkty.setText("Skutecznosc: "+skutecznosc + " %");
+                    }
 
                 }
 
