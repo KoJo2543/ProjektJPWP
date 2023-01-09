@@ -36,16 +36,21 @@ public class MyFrame extends JFrame implements ActionListener{
     JLabel label;
     JComboBox poziomt;
 
+
     //-------------------------------------------
 
         MyFrame(){
             //ustawienie okna gry
             this.setSize(szerokosc,wysokosc);
             this.setLayout(null);
-            this.setResizable(true);
-            this.setBackground(Color.white);
+            this.setResizable(false);
+            this.setBackground(Color.BLACK);
             this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.setTitle("Celuj!");
+            ImageIcon logo = new ImageIcon("logo.png");
+            this.setIconImage(logo.getImage());
+
+
             //----------------------------
 
             //menu
@@ -62,6 +67,7 @@ public class MyFrame extends JFrame implements ActionListener{
             start.setText("START");
             start.setBounds(300,8,120,50);
             start.setBackground(Color.LIGHT_GRAY);
+            start.setOpaque(true);
             menu.add(start);
 
             JButton stop = new JButton();
@@ -86,7 +92,7 @@ public class MyFrame extends JFrame implements ActionListener{
             else {
                 skutecznosc = (100 * pkt) / klik;
 
-                punkty.setText("Skutecznosc: "+skutecznosc + " %" + "Średnie opóźnienie: " + czas/lcelow + " ms");
+                punkty.setText("Skutecznosc: "+skutecznosc + " %" + "Czas: " + czas + " ms");
             }
 
             menu.add(punkty);
@@ -98,6 +104,12 @@ public class MyFrame extends JFrame implements ActionListener{
             exit.setBackground(Color.LIGHT_GRAY);
             menu.add(exit);
 
+            JLabel logomenu = new JLabel(new ImageIcon("logomenu.png"));
+            logomenu.setSize(120,50);
+            logomenu.setLocation(8,8);
+            logomenu.setVisible(true);
+            menu.add(logomenu);
+
             poziomt= new JComboBox(poziom);
             poziomt.setBounds(700,8,120,50);
             poziomt.setBackground(Color.LIGHT_GRAY);
@@ -106,9 +118,9 @@ public class MyFrame extends JFrame implements ActionListener{
             //-------------------------------------------
             timer = new Timer(60,this);
             //cel
-            label = new JLabel();
+            label = new JLabel(new ImageIcon("cel.png"));
             this.add(label);
-            label.setBackground(Color.black);
+            //label.setBackground(Color.black);
             label.setOpaque(true);
             label.setSize(celszer,celwys);
             //----------------------------------------
@@ -130,11 +142,11 @@ public class MyFrame extends JFrame implements ActionListener{
                        klik++;
                        if (klik == 0) {
 
-                           punkty.setText("Skutecznosc: "+ " %" + "Średnie opóźnienie: " +  " ms");
+                           punkty.setText("Skutecznosc: "+ " %" + "Czas: " +  " ms");
                        } else {
                            skutecznosc = (100 * pkt) / klik;
 
-                           punkty.setText("Skutecznosc: "+skutecznosc + " %" + "Średnie opóźnienie: " + czas/lcelow + " ms");
+                           punkty.setText("Skutecznosc: "+skutecznosc + " %" + "Czas: " + czas + " ms");
                        }
 
 
@@ -179,13 +191,15 @@ public class MyFrame extends JFrame implements ActionListener{
                         } else {
                             skutecznosc = (100 * pkt) / klik;
 
-                            punkty.setText("Skutecznosc: "+skutecznosc + " %" + "Średnie opóźnienie: " + czas/lcelow + " ms");
+                            punkty.setText("Skutecznosc: "+skutecznosc + " %" + "Czas: " + czas + " ms");
                         }
                     }
                     else {
+                        punkty.setText("Skutecznosc: "+skutecznosc + " %" + "Średnie opóźnienie: " + czas/lcelow + " ms");
                         System.out.println("winek");
                         started=false;
                         label.setVisible(false);
+                        poziomt.setEnabled(true);
                     }
 
 
@@ -217,14 +231,15 @@ public class MyFrame extends JFrame implements ActionListener{
                     label.setLocation(x,y);
                     pkt=0;
                     klik=0;
+                    poziomt.setEnabled(false);
                     if(klik == 0){
 
-                        punkty.setText("Skutecznosc: "+ " %" + "Średnie opóźnienie: " + " ms");
+                        punkty.setText("Skutecznosc: "+ " %" + "Czas: " + " ms");
                     }
                     else {
                         skutecznosc = (100 * pkt) / klik;
 
-                        punkty.setText("Skutecznosc: "+skutecznosc + " %" + "Średnie opóźnienie: " + czas/lcelow + " ms");
+                        punkty.setText("Skutecznosc: "+skutecznosc + " %" + "Czas: " + czas + " ms");
                     }
                     started=true;
                 }
@@ -257,6 +272,7 @@ public class MyFrame extends JFrame implements ActionListener{
                     label.setVisible(false);
                     started = false;
                     timer.stop();
+                    poziomt.setEnabled(true);
                     if(klik == 0){
 
                         punkty.setText("Wynik");
@@ -264,7 +280,7 @@ public class MyFrame extends JFrame implements ActionListener{
                     else {
                         skutecznosc = (100 * pkt) / klik;
 
-                        punkty.setText("Skutecznosc: "+skutecznosc + " %" + "Średnie opóźnienie: " + czas/lcelow + " ms");
+                        punkty.setText("Skutecznosc: "+skutecznosc + " %" + "Czas: " + czas + " ms");
                     }
 
                 }
@@ -329,6 +345,7 @@ public class MyFrame extends JFrame implements ActionListener{
                 celwys=64;
                 celszer=64;
                 label.setSize(celwys,celszer);
+                label.setIcon(new ImageIcon("cel.png"));
 
             }
             else if(poziomt.getSelectedItem()=="Łatwy"){
@@ -336,6 +353,7 @@ public class MyFrame extends JFrame implements ActionListener{
                 celwys=96;
                 celszer=96;
                 label.setSize(celwys,celszer);
+                label.setIcon(new ImageIcon("cellatwy.png"));
 
             }
             else if(poziomt.getSelectedItem()=="Trudny"){
@@ -343,6 +361,7 @@ public class MyFrame extends JFrame implements ActionListener{
                 celwys=32;
                 celszer=32;
                 label.setSize(celwys,celszer);
+                label.setIcon(new ImageIcon("celtrudny.png"));
 
             }
         }
